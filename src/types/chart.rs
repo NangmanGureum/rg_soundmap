@@ -9,9 +9,9 @@ use serde::{Deserialize, Serialize};
 /// and it includes note information on `SoundMap`.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Sound {
-    #[serde(rename(serialize = "silent_note_time"))]
+    #[serde(alias = "silent_note_time")]
     Silent(u32),
-    #[serde(rename(serialize = "smap_id"))]
+    #[serde(alias = "smap_id")]
     Sound(u16),
 }
 

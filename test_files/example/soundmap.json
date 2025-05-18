@@ -1,0 +1,50 @@
+{
+  "audio_format": "wav",
+  "audio_bits": 24,
+  "audio_sample_rate": 48000,
+  "notes": [
+    {
+      "id": 0,
+      "sound_id": 0,
+      "time": 1056,
+      "pitch": 36,
+      "line": 0
+    },
+    {
+      "id": 1,
+      "sound_id": 0,
+      "time": 1320,
+      "pitch": 36,
+      "line": 0
+    },
+    {
+      "id": 2,
+      "sound_id": 0,
+      "time": 1584,
+      "pitch": 36,
+      "line": 0
+    },
+    {
+      "id": 3,
+      "sound_id": 0,
+      "time": 1848,
+      "pitch": 36,
+      "line": 0
+    }
+  ],
+  "note_line_name": {
+    "0": "Kick"
+  },
+  "bpm": [
+    {
+      "value": 120.0,
+      "time": 0
+    }
+  ],
+  "beat_per_bar": [
+    {
+      "value": 4,
+      "time": 0
+    }
+  ]
+}
