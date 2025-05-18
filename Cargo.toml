@@ -3,6 +3,7 @@ name = "rg_soundmap"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
+description = "A Rust library for managing a sound map format."
 
 [dependencies]
 # Json Processing
