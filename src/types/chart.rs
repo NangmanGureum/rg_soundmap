@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 /// A sound definition for the chart.
+///
 /// In `Silent(u32)`, this is the note sounds silent.
 /// and it includes time information.
 /// The time information appears in increments of 264ths of a beat.
@@ -15,12 +16,14 @@ pub enum Sound {
     Sound(u16),
 }
 
+/// A note definition for the chart.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PlayNote {
     /// A note definition of sound.
     pub sound: Sound,
 
     /// A note type
+    ///
     /// It depends on the chart type. but `0` is most normal note.
     ///
     /// ## Example of definition
