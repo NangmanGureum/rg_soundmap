@@ -14,7 +14,7 @@ pub fn load_smap_dir(smap_path: &str) -> io::Result<(Manifest, SoundMap, Vec<Cha
     let manifest: Manifest = serde_json::from_str(&manifest)?;
 
     // Load soundmap
-    let soundmap_path = format!("{smap_path}/soundmap.json");
+    let soundmap_path = format!("{smap_path}/content.json");
     let soundmap = fs::read_to_string(&soundmap_path)?;
     let soundmap: SoundMap = serde_json::from_str(&soundmap)?;
 
@@ -57,7 +57,7 @@ pub fn save_smap_dir(
     fs::write(&manifest_path, serde_json::to_string_pretty(&manifest)?)?;
 
     // Save soundmap
-    let soundmap_path = format!("{format_path}/soundmap.json");
+    let soundmap_path = format!("{format_path}/content.json");
     fs::write(&soundmap_path, serde_json::to_string_pretty(&soundmap)?)?;
 
     // Save charts
@@ -73,7 +73,7 @@ pub fn save_smap_dir(
 pub fn check_smap(smap_path: &str) -> Result<(), String> {
     // Set directory path
     let manifest_path = format!("{smap_path}/manifest.json");
-    let soundmap_path = format!("{smap_path}/soundmap.json");
+    let soundmap_path = format!("{smap_path}/content.json");
     let charts_dir_path = format!("{smap_path}/charts");
 
     // Check manifest if valid
@@ -134,8 +134,8 @@ pub fn pack(target_path: &str, smap_dir_name: &str, filename: &str) -> io::Resul
         &mut File::open(format!("{smap_dir_path}/manifest.json")).unwrap(),
     )?;
     temp_tar.append_file(
-        "soundmap.json",
-        &mut File::open(format!("{smap_dir_path}/soundmap.json")).unwrap(),
+        "content.json",
+        &mut File::open(format!("{smap_dir_path}/content.json")).unwrap(),
     )?;
 
     temp_tar.append_dir(format!("charts"), ".")?;
