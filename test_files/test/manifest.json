@@ -1,6 +1,8 @@
 {
   "title": "Test",
-  "artists": ["Various Artists"],
+  "artists": [
+    "Various Artists"
+  ],
   "writers": [],
   "sounds": {},
   "genre": ""
