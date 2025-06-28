@@ -16,9 +16,6 @@ pub struct Manifest {
     /// A list of writers
     pub writers: Vec<String>,
 
-    /// A list of charts
-    pub charts: Vec<String>,
-
     /// A map of path of sound file
     pub sounds: HashMap<u16, String>,
 
@@ -31,7 +28,6 @@ impl Default for Manifest {
             title: "Title".to_string(),
             artists: vec!["Various Artists".to_string()],
             writers: Vec::new(),
-            charts: Vec::new(),
             sounds: HashMap::new(),
             genre: String::new(),
         }
@@ -62,10 +58,6 @@ impl Manifest {
 
     pub fn add_writer(&mut self, writer: &str) {
         self.writers.push(writer.to_string());
-    }
-
-    pub fn insert_chart(&mut self, chart: &str) {
-        self.charts.push(chart.to_string());
     }
 
     pub fn insert_sound(&mut self, id: u16, path: &str) {
