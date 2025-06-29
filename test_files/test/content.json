@@ -1,16 +1,16 @@
 {
-  "audio_format": "wav",
-  "audio_bits": 24,
-  "audio_sample_rate": 48000,
+  "audioFormat": "wav",
+  "audioBits": 24,
+  "audioSampleRate": 48000,
   "notes": [],
-  "note_line_name": {},
+  "noteLineName": {},
   "bpm": [
     {
       "value": 120.0,
       "time": 0
     }
   ],
-  "beat_per_bar": [
+  "beatPerBar": [
     {
       "value": 4,
       "time": 0

@@ -10,14 +10,15 @@ use serde::{Deserialize, Serialize};
 /// and it includes note information on `SoundMap`.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Sound {
-    #[serde(alias = "silent_note_time")]
+    #[serde(alias = "silentNoteTime")]
     Silent(u32),
-    #[serde(alias = "smap_id")]
+    #[serde(alias = "smapId")]
     Sound(u16),
 }
 
 /// A note definition for the chart.
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct PlayNote {
     /// A note definition of sound.
     pub sound: Sound,
@@ -92,6 +93,7 @@ impl PlayNote {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Chart {
     /// A name of chart
     pub name: String,

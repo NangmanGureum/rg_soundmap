@@ -1,39 +1,39 @@
 {
   "name": "Example",
-  "chart_type": "Plain",
+  "chartType": "Plain",
   "author": "Example",
-  "difficulty_type": 0,
-  "difficulty_level": 1,
+  "difficultyType": 0,
+  "difficultyLevel": 1,
   "content": [
     {
       "sound": {
-        "smap_id": 0
+        "smapId": 0
       },
-      "note_type": 0,
+      "noteType": 0,
       "group": 0,
       "position": 36
     },
     {
       "sound": {
-        "smap_id": 1
+        "smapId": 1
       },
-      "note_type": 0,
+      "noteType": 0,
       "group": 0,
       "position": 36
     },
     {
       "sound": {
-        "smap_id": 2
+        "smapId": 2
       },
-      "note_type": 0,
+      "noteType": 0,
       "group": 0,
       "position": 36
     },
     {
       "sound": {
-        "smap_id": 3
+        "smapId": 3
       },
-      "note_type": 0,
+      "noteType": 0,
       "group": 0,
       "position": 36
     }

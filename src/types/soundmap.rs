@@ -6,6 +6,7 @@ use serde::{Deserialize, Serialize};
 
 /// Defines a note in a soundmap.
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Note {
     /// The ID of the note.
     pub id: u16,
@@ -77,6 +78,7 @@ impl BeatPerBar {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct SoundMap {
     /// The audio format which used in the soundmap.
     ///

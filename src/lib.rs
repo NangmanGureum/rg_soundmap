@@ -272,7 +272,7 @@ mod tests {
     fn pack_smap() {
         let test_dir = "test_files";
         let smap_name = "pack_test";
-        let smap_path = format!("{test_dir}/{smap_name}");
+        // let smap_path = format!("{test_dir}/{smap_name}");
         let filename = format!("{smap_name}.smap");
         let smap_file_path = format!("{test_dir}/{filename}");
         let smap_result_path = format!("{test_dir}/unpack_result");
