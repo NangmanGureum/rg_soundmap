@@ -2,7 +2,7 @@
 name = "rg_soundmap"
 version = "0.6.0"
 edition = "2024"
-license = "MIT WITH CC-BY-NC-SA-4.0"
+license-file = "README.md"
 description = "A Rust library for managing a sound map format."
 repository = "https://github.com/NangmanGureum/rg_soundmap"
 
