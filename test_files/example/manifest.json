@@ -1,9 +1,0 @@
-{
-  "title": "Example",
-  "artists": ["Example"],
-  "writers": [],
-  "sounds": {
-    "0": "kick.wav"
-  },
-  "genre": ""
-}

@@ -3,7 +3,7 @@
   "audioBits": 24,
   "audioSampleRate": 48000,
   "notes": [],
-  "noteLineName": {},
+  "trackTags": [],
   "bpm": [
     {
       "value": 120.0,
@@ -15,5 +15,6 @@
       "value": 4,
       "time": 0
     }
-  ]
+  ],
+  "noteTick": 192
 }

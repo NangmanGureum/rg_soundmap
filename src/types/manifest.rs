@@ -3,7 +3,17 @@
 //! It contains JSON data
 
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Sound {
+    pub id: u16,
+    pub path: String,
+
+    /// The pitch of the note.
+    /// for example, C4(= Middle C) note goes 60 in decimal. It same as MIDI standard.
+    /// If it is drum sound, it follows MIDI GM Drummap.
+    pub pitch: u8,
+}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Manifest {
@@ -17,7 +27,7 @@ pub struct Manifest {
     pub writers: Vec<String>,
 
     /// A map of path of sound file
-    pub sounds: HashMap<u16, String>,
+    pub sounds: Vec<Sound>,
 
     pub genre: String,
 }
@@ -28,7 +38,7 @@ impl Default for Manifest {
             title: "Title".to_string(),
             artists: vec!["Various Artists".to_string()],
             writers: Vec::new(),
-            sounds: HashMap::new(),
+            sounds: Vec::new(),
             genre: String::new(),
         }
     }
@@ -60,7 +70,48 @@ impl Manifest {
         self.writers.push(writer.to_string());
     }
 
-    pub fn insert_sound(&mut self, id: u16, path: &str) {
-        self.sounds.insert(id, path.to_string());
+    pub fn insert_sound(&mut self, id: u16, path: &str, pitch: u8) {
+        let mut ids: Vec<u16> = Vec::new();
+
+        for sound in &self.sounds {
+            ids.push(sound.id);
+        }
+
+        if self.sounds.len() == 0 {
+            self.sounds.push(Sound {
+                id,
+                path: path.to_string(),
+                pitch,
+            });
+        } else {
+            for (index, sound_id) in ids.iter().enumerate() {
+                // If missing number (0:0, 1:1, '2:3', 3:4 ...)
+                if index != *sound_id as usize {
+                    self.sounds.push(Sound {
+                        id: index as u16,
+                        path: path.to_string(),
+                        pitch,
+                    });
+                    break;
+                }
+                // If last index
+                else if index == (ids.len() - 1) {
+                    self.sounds.push(Sound {
+                        id: (index as u16) + 1,
+                        path: path.to_string(),
+                        pitch,
+                    });
+                }
+            }
+        }
+    }
+
+    pub fn get_sound_path(&self, id: u16) -> Option<&str> {
+        for s in &self.sounds {
+            if s.id == id {
+                return Some(&s.path);
+            }
+        }
+        None
     }
 }

@@ -1,9 +1,10 @@
 [package]
 name = "rg_soundmap"
-version = "0.5.0"
+version = "0.6.0"
 edition = "2024"
-license = "MIT"
+license = "MIT WITH CC-BY-NC-SA-4.0"
 description = "A Rust library for managing a sound map format."
+repository = "https://github.com/NangmanGureum/rg_soundmap"
 
 [dependencies]
 # Json Processing

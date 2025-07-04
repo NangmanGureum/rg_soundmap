@@ -2,18 +2,25 @@ use serde::{Deserialize, Serialize};
 
 /// A sound definition for the chart.
 ///
-/// In `Silent(u32)`, this is the note sounds silent.
-/// and it includes time information.
-/// The time information appears in increments of 264ths of a beat.
+/// `sn_note_id` is the ID of the note in the content of soundmap.
+/// `time` is the time of the sound in the chart.
 ///
-/// In `Sound(u16)`, this is the note sounds playing sound.
-/// and it includes note information on `SoundMap`.
+/// If `smap_note_id` is `Some(u16)`, it means that the sound is associated with a specific note. and `time` is unused. but it recommends to be same as the note of soundmap defined.
+/// If `smap_note_id` is `None`, it means that the sound is not associated with any specific note. instead `time` is used for specific note timing.
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub enum Sound {
-    #[serde(alias = "silentNoteTime")]
-    Silent(u32),
-    #[serde(alias = "smapId")]
-    Sound(u16),
+#[serde(rename_all = "camelCase")]
+pub struct NoteSound {
+    pub smap_note_id: Option<u16>,
+    pub time: u32,
+}
+
+impl Default for NoteSound {
+    fn default() -> Self {
+        Self {
+            smap_note_id: None,
+            time: 0,
+        }
+    }
 }
 
 /// A note definition for the chart.
@@ -21,7 +28,7 @@ pub enum Sound {
 #[serde(rename_all = "camelCase")]
 pub struct PlayNote {
     /// A note definition of sound.
-    pub sound: Sound,
+    pub sound: NoteSound,
 
     /// A note type
     ///
@@ -45,18 +52,18 @@ pub struct PlayNote {
     /// It depends on the note type. but `0` is using for normal note.
     pub group: u8,
 
-    /// A note position(line) on the chart
+    /// A note's lane on the chart
     /// It depends on the chart type
-    pub position: u8,
+    pub lane: u8,
 }
 
 impl Default for PlayNote {
     fn default() -> Self {
         Self {
-            sound: Sound::Silent(0),
+            sound: NoteSound::default(),
             note_type: 0,
             group: 0,
-            position: 0,
+            lane: 0,
         }
     }
 }
@@ -67,12 +74,18 @@ impl PlayNote {
     }
 
     pub fn with_sound(mut self, smap_note_id: u16) -> Self {
-        self.sound = Sound::Sound(smap_note_id);
+        self.sound = NoteSound {
+            smap_note_id: Some(smap_note_id),
+            time: 0,
+        };
         self
     }
 
     pub fn with_time(mut self, time: u32) -> Self {
-        self.sound = Sound::Silent(time);
+        self.sound = NoteSound {
+            smap_note_id: None,
+            time,
+        };
         self
     }
 
@@ -86,8 +99,8 @@ impl PlayNote {
         self
     }
 
-    pub fn with_position(mut self, note_position: u8) -> Self {
-        self.position = note_position;
+    pub fn with_lane(mut self, note_lane: u8) -> Self {
+        self.lane = note_lane;
         self
     }
 }
@@ -161,13 +174,13 @@ impl Chart {
         self
     }
 
-    pub fn insert_note(&mut self, pos: u8, smap_note_id: u16) {
-        let note = PlayNote::new().with_position(pos).with_sound(smap_note_id);
+    pub fn insert_note(&mut self, lane: u8, smap_note_id: u16) {
+        let note = PlayNote::new().with_lane(lane).with_sound(smap_note_id);
         self.content.push(note);
     }
 
-    pub fn insert_silent_note(&mut self, pos: u8, time: u32) {
-        let note = PlayNote::new().with_position(pos).with_time(time);
+    pub fn insert_silent_note(&mut self, lane: u8, time: u32) {
+        let note = PlayNote::new().with_lane(lane).with_time(time);
         self.content.push(note);
     }
 }

@@ -1,8 +1,11 @@
-//! This module contains the definition of related to sound stuff.
-
-use std::collections::HashMap;
+//! This module contains the definition of related to sound stuff.x
 
 use serde::{Deserialize, Serialize};
+
+/// This `const` defines the recommended note tick.
+/// This number is used many digital music software.
+/// If the note tick doesn't match the recommended note tick, it can't guarantee to compatibility with other software.
+const RECOMMENDED_NOTE_TICK: u16 = 192;
 
 /// Defines a note in a soundmap.
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -15,16 +18,11 @@ pub struct Note {
     pub sound_id: u16,
 
     /// The time at which the note should be played.
-    /// It appears in increments of 264ths of a beat. (A beat in 0~263)
+    /// It appears in increments of ...s of a beat. (A beat in 0~263)
     pub time: u32,
 
-    /// The pitch of the note.
-    /// for example, C4(= Middle C) note goes 60 in decimal. It same as MIDI standard.
-    /// If it is drum sound, it follows MIDI GM Drummap.
-    pub pitch: u8,
-
-    /// The line number of the note.
-    pub line: u16,
+    /// The track number of the note.
+    pub track: u16,
 }
 
 /// Defines a BPM set or change in a soundmap.
@@ -77,6 +75,87 @@ impl BeatPerBar {
     }
 }
 
+/// Defines an instrument
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum Instrument {
+    /// Etc.
+    SomeElse,
+
+    /// Kick Drums
+    Kick,
+
+    /// Snare Drum
+    Snare,
+
+    /// Hi-Hat
+    HiHat,
+
+    /// Tom Drum
+    Tom,
+
+    /// Crash Cymbal
+    CrashCym,
+
+    /// Ride Cymbal
+    RideCym,
+
+    /// Clap
+    Clap,
+
+    /// Piano
+    Pno,
+
+    /// Acoustic Guitar
+    AGui,
+
+    /// Electric Guitar
+    EGui,
+
+    /// Bass Guitar
+    BGui,
+
+    /// Electric Bass Guitar
+    EBGui,
+
+    /// Keyboard
+    Kbd,
+
+    /// Synthesizer
+    Syn,
+
+    /// Voice (LV, BV, Sampled voice, etc.)
+    Vox,
+}
+
+impl Default for Instrument {
+    fn default() -> Self {
+        Self::SomeElse
+    }
+}
+
+/// Defines a track
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct TrackTag {
+    /// The id of the track.
+    pub id: u16,
+
+    /// The name of the track.
+    pub name: String,
+
+    /// The instrument used in the track.
+    pub instrument: Instrument,
+}
+
+impl Default for TrackTag {
+    fn default() -> Self {
+        Self {
+            id: 0,
+            name: String::new(),
+            instrument: Instrument::default(),
+        }
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SoundMap {
@@ -106,15 +185,18 @@ pub struct SoundMap {
     /// A list of notes.
     pub notes: Vec<Note>,
 
-    /// A name of the line.
-    /// It depends `Note.line`
-    pub note_line_name: HashMap<u16, String>,
+    /// A list of tags of the tracks.
+    /// It depends `Note.track`
+    pub track_tags: Vec<TrackTag>,
 
     /// A list of beats per minute.
     pub bpm: Vec<Bpm>,
 
     /// A list of beat per bar.
     pub beat_per_bar: Vec<BeatPerBar>,
+
+    /// A tick of note.
+    pub note_tick: u16,
 }
 
 impl Default for SoundMap {
@@ -124,11 +206,12 @@ impl Default for SoundMap {
             audio_bits: 24,
             audio_sample_rate: 48000,
             notes: Vec::new(),
-            note_line_name: HashMap::new(),
+            track_tags: Vec::new(),
             // Default to 120 BPM
             bpm: vec![Bpm::default()],
             // Default to 4 beats per bar (similar to 4/4 time signature)
             beat_per_bar: vec![BeatPerBar::default()],
+            note_tick: RECOMMENDED_NOTE_TICK,
         }
     }
 }
@@ -169,11 +252,22 @@ impl SoundMap {
         self
     }
 
-    pub fn set_note_line(&mut self, id: u16, name: &str) {
-        self.note_line_name.insert(id, name.to_string());
+    pub fn set_note_track(&mut self, id: u16, name: &str, inst: Instrument) {
+        for track in &mut self.track_tags {
+            if track.id == id {
+                track.name = name.to_string();
+                track.instrument = inst;
+                return;
+            }
+        }
+        self.track_tags.push(TrackTag {
+            id,
+            name: name.to_string(),
+            instrument: inst,
+        });
     }
 
-    pub fn insert_note(&mut self, sound_id: u16, time: u32, pitch: u8, line: u16) {
+    pub fn insert_note(&mut self, sound_id: u16, time: u32, track: u16) {
         let mut ids: Vec<u16> = Vec::new();
 
         for n in &self.notes {
@@ -185,8 +279,7 @@ impl SoundMap {
                 id: 0,
                 sound_id,
                 time,
-                pitch,
-                line,
+                track,
             });
         } else {
             for (index, note_id) in ids.iter().enumerate() {
@@ -196,8 +289,7 @@ impl SoundMap {
                         id: index as u16,
                         sound_id,
                         time,
-                        pitch,
-                        line,
+                        track,
                     });
                     break;
                 }
@@ -207,8 +299,7 @@ impl SoundMap {
                         id: (index as u16) + 1,
                         sound_id,
                         time,
-                        pitch,
-                        line,
+                        track,
                     });
                 }
             }
