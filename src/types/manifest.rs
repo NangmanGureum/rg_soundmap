@@ -71,6 +71,18 @@ impl Manifest {
     }
 
     pub fn insert_sound(&mut self, id: u16, path: &str, pitch: u8) {
+        let target_pos = self.sounds.iter().position(|x| x.id == id).unwrap();
+        self.sounds.insert(
+            target_pos,
+            Sound {
+                id,
+                path: path.to_string(),
+                pitch,
+            },
+        );
+    }
+
+    pub fn push_sound(&mut self, path: &str, pitch: u8) {
         let mut ids: Vec<u16> = Vec::new();
 
         for sound in &self.sounds {
@@ -79,7 +91,7 @@ impl Manifest {
 
         if self.sounds.len() == 0 {
             self.sounds.push(Sound {
-                id,
+                id: 0,
                 path: path.to_string(),
                 pitch,
             });
